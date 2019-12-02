@@ -1,0 +1,18 @@
+---
+
+- step:
+    name: Train model
+    image: tensorflow/tensorflow:1.15.0-gpu-py3
+    command: python train.py {parameters}
+    inputs:
+      - name: mnist
+        default: https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+    parameters:
+      - name: epochs
+        description: How long to train
+        type: integer
+        default: 5
+      - name: learning_rate
+        description: How much to change
+        type: float
+        default: 0.001
