@@ -56,7 +56,14 @@ cb = tf.keras.callbacks.LambdaCallback(on_epoch_end=log)
 
 model.fit(x_train, y_train, epochs=args.epochs, callbacks=[cb])
 
-model.evaluate(x_test,  y_test, verbose=2)
+
+# Evaluate the model and print out the test metrics as JSON
+
+test_loss, test_acc = model.evaluate(x_test,  y_test, verbose=2)
+print(json.dumps({
+    'test_loss': str(test_loss),
+    'test_acc': str(test_acc),
+}))
 
 
 # Read output files from Valohai outputs directory
