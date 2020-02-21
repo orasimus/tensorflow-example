@@ -1,12 +1,22 @@
 ---
 
 - step:
+    name: Preprocess data
+    image: python:3.6
+    command:
+      - pip install numpy==1.18.1
+      - python preprocess_data.py
+    inputs:
+      - name: mnist
+        default: https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+
+        
+- step:
     name: Train model
     image: tensorflow/tensorflow:1.15.0-gpu-py3
     command: python train.py {parameters}
     inputs:
-      - name: mnist
-        default: https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+      - name: preprocessed_mnist
     parameters:
       - name: epochs
         description: How long to train
@@ -16,3 +26,25 @@
         description: How much to change
         type: float
         default: 0.001
+
+
+- pipeline:
+    name: Training pipeline
+    nodes:
+      - name: preprocess
+        type: execution
+        step: Preprocess data
+      - name: train
+        type: execution
+        step: Train model
+    edges:
+      - [preprocess.output.*.npz, train.input.preprocessed_mnist]
+
+
+- endpoint:
+    name: inference
+    image: tensorflow/tensorflow:1.15.0-gpu-py3
+    wsgi: deploy:predict
+    files:
+      - name: model
+        path: model.h5

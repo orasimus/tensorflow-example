@@ -1,7 +1,8 @@
 import argparse
 import json
-import numpy as np
 import os
+
+import numpy as np
 import tensorflow as tf
 
 
@@ -20,13 +21,11 @@ args = parser.parse_args()
 # and cache the data for quick experimentation
 
 input_path = os.getenv('VH_INPUTS_DIR', './inputs')
-f = os.path.join(input_path, 'mnist/mnist.npz')
+f = os.path.join(input_path, 'preprocessed_mnist/preprocessed_mnist.npz')
 
 with np.load(f, allow_pickle=True) as f:
     x_train, y_train = f['x_train'], f['y_train']
     x_test, y_test = f['x_test'], f['y_test']
-
-x_train, x_test = x_train / 255.0, x_test / 255.0
 
 model = tf.keras.models.Sequential([
   tf.keras.layers.Flatten(input_shape=(28, 28)),
@@ -66,7 +65,7 @@ print(json.dumps({
 }))
 
 
-# Read output files from Valohai outputs directory
+# Write output files to Valohai outputs directory
 # This enables Valohai to version your data 
 # and upload output it to the default data store
 
