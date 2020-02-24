@@ -13,7 +13,7 @@
         
 - step:
     name: Train model
-    image: tensorflow/tensorflow:1.15.0-gpu-py3
+    image: tensorflow/tensorflow:1.15.2-gpu-py3
     command: python train.py {parameters}
     inputs:
       - name: preprocessed_mnist
@@ -43,7 +43,7 @@
 
 - endpoint:
     name: inference
-    image: tensorflow/tensorflow:1.15.0-gpu-py3
+    image: tensorflow/tensorflow:1.15.2-gpu-py3
     wsgi: deploy:predict
     files:
       - name: model
