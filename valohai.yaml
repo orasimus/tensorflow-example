@@ -4,7 +4,7 @@
     name: Preprocess data
     image: python:3.6
     command:
-      - pip install numpy==1.18.1
+      - pip install numpy==1.18.1 valohai-utils
       - python preprocess_data.py
     inputs:
       - name: mnist
@@ -13,8 +13,10 @@
         
 - step:
     name: Train model
-    image: tensorflow/tensorflow:1.15.2-gpu-py3
-    command: python train.py {parameters}
+    image: tensorflow/tensorflow:2.4.1-gpu
+    command:
+      - pip install valohai-utils
+      - python train.py {parameters}
     inputs:
       - name: preprocessed_mnist
     parameters:
@@ -43,7 +45,7 @@
 
 - endpoint:
     name: inference
-    image: tensorflow/tensorflow:1.15.2-gpu-py3
+    image: tensorflow/tensorflow:2.4.1-gpu
     wsgi: deploy:predict
     files:
       - name: model
