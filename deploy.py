@@ -37,6 +37,9 @@ def predict(environ, start_response):
     result = {
         'digit': str(np.argmax(prediction))
     }
+
+    print(json.dumps({'vh_metadata': result}))
+
     response = Response(json.dumps(result), content_type='application/json')
     return response(environ, start_response)
 
