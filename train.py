@@ -39,7 +39,7 @@ def log(epoch, logs):
 
 cb = tf.keras.callbacks.LambdaCallback(on_epoch_end=log)
 
-model.fit(x_train, y_train, epochs=vh.parameters('epochs').value, callbacks=[cb])
+model.fit(x_train, y_train, epochs=vh.parameters('epochs').value)
 
 
 # Evaluate the model and print out the test metrics as JSON
